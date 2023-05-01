@@ -1,22 +1,7 @@
-use std::io::{self, Lines};
+use std::io::{self, BufRead};
 
-#[derive(Debug)]
-pub enum Input {
-    File(Lines<std::io::BufReader<std::fs::File>>),
-    StdIn(Lines<std::io::StdinLock<'static>>),
-}
-
-impl Input {
-    fn get_line(&mut self) -> Option<io::Result<String>> {
-        match self {
-            Input::File(ref mut v) => v.next(),
-            Input::StdIn(ref mut v) => v.next(),
-        }
-    }
-}
-
-pub fn run(mut input: Input) -> io::Result<()> {
-    while let Some(line) = input.get_line() {
+pub fn run(input: &mut dyn BufRead) -> io::Result<()> {
+    for line in input.lines() {
         let line = line?.trim().to_lowercase();
         if line == "quit" {
             break;

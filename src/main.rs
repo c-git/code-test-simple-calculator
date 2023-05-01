@@ -1,22 +1,25 @@
 use std::{
     env,
     fs::File,
-    io::{self, stdin, BufRead},
+    io::{self, stdin},
 };
 
-use code_test_simple_calculator::Input;
+use code_test_simple_calculator::run;
 
 fn main() {
-    // Determine input source
-    let input = if let Some(filename) = env::args().nth(1) {
+    let result = if let Some(filename) = env::args().nth(1) {
+        // Read input from file
         let file = File::open(filename).expect("Unable to access {filename}");
-        Input::File(io::BufReader::new(file).lines())
+        let mut input = io::BufReader::new(file);
+        run(&mut input)
     } else {
-        Input::StdIn(stdin().lock().lines())
+        // Read input from stdin
+        let mut input = stdin().lock();
+        run(&mut input)
     };
 
     // Run program
-    match code_test_simple_calculator::run(input) {
+    match result {
         Ok(_) => (),
         Err(e) => eprintln!("{e}"),
     }
