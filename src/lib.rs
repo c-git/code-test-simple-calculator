@@ -120,7 +120,7 @@ impl Calculator {
         self.perform_operations();
         debug_assert!(self.pending_operations.is_empty());
         let id = RegID::new(register_name.to_owned())?;
-        Ok(*self.registers.entry(id).or_default())
+        Ok(*self.registers.entry(id).or_insert(0))
     }
 
     fn operation(&mut self, operand1: &str, op: &str, operand2: &str) -> Result<(), String> {
@@ -143,10 +143,11 @@ impl Calculator {
         type FnModify = dyn FnOnce(&mut i32, i32);
         let mut binary_op = |reg_id: RegID, operand2: Operand, f: Box<FnModify>| {
             let value2 = match operand2 {
-                Operand::Register(reg_id) => *self.registers.entry(reg_id).or_default(),
+                Operand::Register(reg_id) => *self.registers.entry(reg_id).or_insert(0),
                 Operand::Number(val) => val,
             };
-            self.registers.entry(reg_id).and_modify(|x| f(x, value2));
+            let reg = self.registers.entry(reg_id).or_insert(0);
+            f(reg, value2);
         };
 
         match op {
