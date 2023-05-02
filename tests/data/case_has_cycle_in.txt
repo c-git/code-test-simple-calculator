@@ -1,0 +1,3 @@
+first add second
+second add first
+print first
