@@ -46,6 +46,8 @@ fn no_quit() -> Result<(), Box<dyn std::error::Error>> {
     )
 }
 
+// TODO Add test to ensure cycle detection works
+
 fn run_executable(
     input_filename: &str,
     input_type: &InputType,
