@@ -37,6 +37,15 @@ fn two_register2() -> Result<(), Box<dyn std::error::Error>> {
     )
 }
 
+#[test]
+fn no_quit() -> Result<(), Box<dyn std::error::Error>> {
+    run_executable(
+        "case_no_quit_in.txt",
+        &InputType::Filename,
+        "case_no_quit_out.txt",
+    )
+}
+
 fn run_executable(
     input_filename: &str,
     input_type: &InputType,
